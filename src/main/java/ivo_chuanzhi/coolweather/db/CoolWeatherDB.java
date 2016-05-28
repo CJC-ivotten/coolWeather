@@ -11,6 +11,7 @@ import java.util.List;
 import ivo_chuanzhi.coolweather.model.City;
 import ivo_chuanzhi.coolweather.model.County;
 import ivo_chuanzhi.coolweather.model.Province;
+import ivo_chuanzhi.coolweather.utils.LogUtil;
 
 /**
  * Created by chenjiacheng on 2016/5/28.
@@ -70,6 +71,7 @@ public class CoolWeatherDB {
             values.put("province_name",province.getProvinceName());
             values.put("province_code",province.getProvinceCode());
             db.insert("Province",null,values);
+            LogUtil.d("coolweather","保存Province实例");
         }
     }
 
@@ -93,6 +95,8 @@ public class CoolWeatherDB {
         if (cursor != null){
             cursor.close();
         }
+        LogUtil.d("coolweather","加载省得数据,大小为：" + list.size());
+
         return list;
 
     }
@@ -108,6 +112,7 @@ public class CoolWeatherDB {
             values.put("city_code",city.getCityCode());
             values.put("province_id",city.getProvinceId());
             db.insert("City",null,values);
+            LogUtil.d("coolweather","保存实例");
         }
     }
 
@@ -134,6 +139,7 @@ public class CoolWeatherDB {
         if(cursor != null){
             cursor.close();
         }
+        LogUtil.d("coolweather","加载市得数据,大小为：" + list.size());
         return list;
     }
 
@@ -148,6 +154,7 @@ public class CoolWeatherDB {
             values.put("county_code",county.getCountyCode());
             values.put("city_id",county.getCityId());
             db.insert("County",null,values);
+            LogUtil.d("coolweather","保存County实例");
         }
     }
 
@@ -174,6 +181,7 @@ public class CoolWeatherDB {
         if (cursor != null){
             cursor.close();
         }
+        LogUtil.d("coolweather","加载县得数据,大小为：" + list.size());
         return list;
     }
 

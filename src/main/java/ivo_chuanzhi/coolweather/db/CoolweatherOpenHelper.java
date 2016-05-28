@@ -4,6 +4,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import ivo_chuanzhi.coolweather.utils.LogUtil;
+
 /**
  * Created by chenjiacheng on 2016/5/28.
  */
@@ -45,8 +47,13 @@ public class CoolweatherOpenHelper extends SQLiteOpenHelper{
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_PROVINCE); // 省
+        LogUtil.d("coolweather","创建ProVince表成功");
+
         db.execSQL(CREATE_CITY); // 市
+        LogUtil.d("coolweather","创建City表成功");
+
         db.execSQL(CREATE_COUNTY); // 县
+        LogUtil.d("coolweather","创建County表成功");
     }
 
     @Override
