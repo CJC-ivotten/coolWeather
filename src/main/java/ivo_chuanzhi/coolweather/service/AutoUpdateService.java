@@ -7,11 +7,13 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.BitmapFactory;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
-import android.support.v4.app.NotificationCompat;
+
+import android.support.v7.app.NotificationCompat;
 import android.widget.RemoteViews;
 
 import ivo_chuanzhi.coolweather.R;
@@ -28,6 +30,10 @@ import ivo_chuanzhi.coolweather.utils.Utility;
 
 public class AutoUpdateService extends Service{
 
+    Notification notification;
+    RemoteViews contentView;
+    NotificationCompat.Builder builder;
+    PendingIntent pendingIntent;
 
 
     @Nullable
@@ -39,23 +45,29 @@ public class AutoUpdateService extends Service{
     @Override
     public void onCreate() {
         super.onCreate();
-        //Notification notification = new Notification(R.drawable.karen,"Karen’s home weather",System.currentTimeMillis());
-   /*     NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(MyApplication.getContext());
-        builder.setSmallIcon(R.drawable.karen);
-        Notification notification = builder.build();
-        //自定义通知布局
-        RemoteViews contentView = new RemoteViews(MyApplication.getContext().getPackageName(),R.layout.notification_layout);
-        contentView.setImageViewResource(R.id.notification_image,R.drawable.karen);
-        contentView.setTextViewText(R.id.notification_temp1,"22度");
-        contentView.setTextViewText(R.id.notification_temp2,"32度");
-        contentView.setTextViewText(R.id.notification_publish_text,"今天8:00发布");
-        notification.contentView = contentView;
+        builder = new NotificationCompat.Builder(MyApplication.getContext());
+
+        //自定义通知布局  这里并没有使用自定义的通知布局，没有用到contentView
+        contentView = new RemoteViews(MyApplication.getContext().getPackageName(),R.layout.notification_layout);
+       // contentView.setImageViewResource(R.id.notification_image,R.drawable.karen);
+
+        contentView.setTextViewText(R.id.notification_text,"河源 今天 晴 22度~33度");
 
 
         Intent notificationIntent = new Intent(this, WeatherActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this,0,notificationIntent,0);
-        startForeground(1,notification);*/
+        pendingIntent = PendingIntent.getActivity(this,0,notificationIntent,0);
+
+        notification = builder
+                .setContentText("河源 今天 晴 22度~33度")
+              //  .setContent(contentView)
+                .setContentIntent(pendingIntent)
+                .setWhen(System.currentTimeMillis())
+                .setSmallIcon(R.drawable.karen)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.karen))
+                .build();
+
+      //  manager.notify(1, notification);
+        startForeground(1, notification);
     }
 
     @Override
@@ -66,10 +78,46 @@ public class AutoUpdateService extends Service{
             public void run() {
                 updateWeather();
                 System.out.println("后台更新天气！！！");
+                try {
+                    //做一个延时
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                System.out.println("更新前台");
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(MyApplication.getContext());
+                String cityName = preferences.getString("city_name","");
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append("今天"); stringBuilder.append(" ");
+                stringBuilder.append(preferences.getString("weather_desp","")); stringBuilder.append(" ");
+                stringBuilder.append(preferences.getString("temp2","")); stringBuilder.append(" ");
+                stringBuilder.append("~");
+                stringBuilder.append(preferences.getString("temp1","")); stringBuilder.append(" ");
+
+
+
+             //   contentView.setTextViewText(R.id.notification_text,stringBuilder.toString());
+                notification = builder
+                        .setContentTitle(cityName)
+                        .setContentText(stringBuilder.toString())
+                    //    .setContent(contentView)
+                        .setContentIntent(pendingIntent)
+                        .setWhen(System.currentTimeMillis())
+                        .setTicker("老家的天气")
+                        .setSmallIcon(R.drawable.karen)
+                        .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.karen))
+                        .build();
+                startForeground(1, notification);
+                System.out.println(stringBuilder.toString());
             }
         }).start();
+
+
+
         AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
         int anHour = 4 * 60 * 60 * 1000;
+//        int anHour = 60 * 1000;
         long triggerAtTime = SystemClock.elapsedRealtime() + anHour;
         Intent i = new Intent(this,AutoUpdateReceiver.class);
         PendingIntent pi = PendingIntent.getBroadcast(this,0,i,0);
@@ -82,6 +130,7 @@ public class AutoUpdateService extends Service{
 
     @Override
     public void onDestroy() {
+        stopForeground(false);
         super.onDestroy();
     }
 

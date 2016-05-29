@@ -4,66 +4,23 @@
     android:layout_height="match_parent" >
 
     <ImageView
-        android:id="@+id/notification_image"
         android:src="@drawable/karen"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:id="@+id/notification_image"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_alignParentLeft="true"
         android:layout_marginRight="10dp" />
 
     <TextView
-        android:id="@+id/title"
-        android:text="河源"
-        android:textSize="30sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/notification_image" />
-
-    <TextView
+        android:text="内容"
         android:id="@+id/notification_text"
-        android:text="晴"
+        android:textSize="15sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/title"
-        android:layout_toRightOf="@id/notification_image" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="97dp"
+        android:layout_marginStart="97dp" />
 
-    <TextView
-        android:text="22度"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/notification_text"
-        android:layout_toRightOf="@+id/notification_text"
-        android:layout_toEndOf="@+id/notification_text"
-        android:layout_marginLeft="11dp"
-        android:layout_marginStart="11dp"
-        android:id="@+id/notification_temp1" />
-
-    <TextView
-        android:text="32度"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/notification_temp2"
-        android:layout_alignBaseline="@+id/textView2"
-        android:layout_alignBottom="@+id/textView2"
-        android:layout_toRightOf="@+id/textView2"
-        android:layout_toEndOf="@+id/textView2" />
-
-    <TextView
-        android:text="~"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView2"
-        android:layout_below="@+id/title"
-        android:layout_toRightOf="@+id/title"
-        android:layout_toEndOf="@+id/title" />
-
-    <TextView
-        android:text="发布时间"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/notification_text"
-        android:layout_toLeftOf="@+id/textView2"
-        android:layout_toStartOf="@+id/textView2"
-        android:id="@+id/notification_publish_text" />
 
 </RelativeLayout>
