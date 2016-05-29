@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import ivo_chuanzhi.coolweather.R;
+import ivo_chuanzhi.coolweather.service.AutoUpdateService;
 import ivo_chuanzhi.coolweather.utils.HttpCallbackListener;
 import ivo_chuanzhi.coolweather.utils.HttpUtil;
 import ivo_chuanzhi.coolweather.utils.Utility;
@@ -56,9 +57,14 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
             weatherInfoLayout.setVisibility(View.INVISIBLE);
             cityNameText.setVisibility(View.INVISIBLE);
             queryWeatherCode(countyCode);
+            Intent intent = new Intent(this, AutoUpdateService.class);
+            startService(intent);
         }else {
             // 没有县级代号就直接显示本地天气
             showWeather();
+            //激活自动更新的后台服务
+            Intent intent = new Intent(this, AutoUpdateService.class);
+            startService(intent);
         }
     }
 
@@ -135,6 +141,9 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
         currentDateText.setText(preferences.getString("current_date",""));
         weatherInfoLayout.setVisibility(View.VISIBLE);
         cityNameText.setVisibility(View.VISIBLE);
+        //激活自动更新的后台服务
+//        Intent intent = new Intent(this, AutoUpdateService.class);
+//        startService(intent);
     }
 
 
